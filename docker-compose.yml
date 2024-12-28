@@ -1,0 +1,74 @@
+version: "3.8"
+
+services:
+  # PostgreSQL service
+  db:
+    container_name: ${PROJECT_NAME}_db
+    image: postgres:16  # Using PostgreSQL 16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+    ports:
+      - 5434:5432  # Mapping PostgreSQL port
+    restart: always
+
+  # Django backend service
+  web: &web
+    container_name: ${PROJECT_NAME}_backend
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: ./entrypoint.dev.sh
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - ./:/app
+      - ./static:/home/app/web/static
+      - ./media:/home/app/web/media
+      - ./locale:/home/app/web/locale
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Tashkent
+    ports:
+      - 8000:8000  # Exposing Django app on port 8000
+    depends_on:
+      - db
+      - redis
+
+  # Daphne ASGI server
+  daphne:
+    <<: *web
+    container_name: ${PROJECT_NAME}_ws
+    command: python -m daphne -b 0.0.0.0 -p 8893 core.asgi:application
+    ports:
+      - 8893:8893
+    depends_on:
+      - db
+      - redis
+
+  # Redis service
+  redis:
+    container_name: ${PROJECT_NAME}_redis
+    image: redis:7.2.4-alpine
+    restart: always
+
+  # Celery worker service
+  celery:
+    container_name: ${PROJECT_NAME}_celery
+    <<: *web
+    command: celery -A core worker --beat --scheduler django --loglevel=info
+    restart: always
+    ports: []
+
+volumes:
+  postgres_data:
+  static_volume:
