@@ -39,7 +39,7 @@ AUTH_USER_MODEL: str = "users.User"
 
 DJANGO_APPS: list[str] = [
     "daphne",
-    # "jazzmin",
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

@@ -46,4 +46,4 @@ class User(AbstractUser, BaseModel):
         return f"{self.first_name} {self.last_name}"
 
     def __str__(self):
-        return f"User(email={self.email}, {self.get_full_name})"
+        return self.email
