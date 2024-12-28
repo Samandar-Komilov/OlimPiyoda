@@ -34,8 +34,9 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'daphne',
+    # "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +44,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+EXTERNAL_APPS = [
+]
+
+CUSTOM_APPS = [
+    'apps.users',
+]
+
+INSTALLED_APPS = DJANGO_APPS + EXTERNAL_APPS + CUSTOM_APPS
+
+# Middleware definition
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
