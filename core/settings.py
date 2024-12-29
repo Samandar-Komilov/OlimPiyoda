@@ -40,6 +40,7 @@ DJANGO_APPS: list[str] = [
 EXTERNAL_APPS: list[str] = [
     "rest_framework",
     "rest_framework_simplejwt",
+    "drf_spectacular",
 ]
 
 CUSTOM_APPS: list[str] = [
@@ -102,6 +103,7 @@ DATABASES = {
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SIMPLE_JWT = {
@@ -111,6 +113,21 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_LIFETIME_LATE_USER": timedelta(days=1),
     "SLIDING_TOKEN_LIFETIME_LATE_USER": timedelta(days=30),
 }
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "OlimPiyoda API",
+    "DESCRIPTION": "OlimPiyoda is an olympiad management system.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    # OTHER SETTINGS
+}
+
+
+# Authentication backends
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 
 # Password validation
