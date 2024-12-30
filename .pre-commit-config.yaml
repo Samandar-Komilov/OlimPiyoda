@@ -49,6 +49,7 @@ repos:
     hooks:
       - id: isort
         name: isort (python)
+        args: [ '--profile', 'black', '--line-length', '120' ]
   - repo: local
     hooks:
       - id: django-test

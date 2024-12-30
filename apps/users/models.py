@@ -16,7 +16,9 @@ class User(AbstractUser, BaseModel):
     avatar = models.ImageField(upload_to="avatars/", verbose_name=_("Avatar"), null=True, blank=True)
     birth_date = models.DateField(verbose_name=_("Birth date"), null=True, blank=True)
     phone = models.CharField(max_length=30, verbose_name=_("Phone"), null=True, blank=True)
-    gender = models.CharField(verbose_name=_("Gender"), choices=GenderChoices.choices, max_length=6)
+    gender = models.CharField(
+        verbose_name=_("Gender"), choices=GenderChoices.choices, max_length=6, null=True, blank=True
+    )
     region = models.ForeignKey(
         "common.Region", on_delete=models.SET_NULL, verbose_name=_("Region"), null=True, blank=True
     )
