@@ -69,6 +69,19 @@ services:
     restart: always
     ports: []
 
+  # pgweb service for PostgreSQL web interface
+  pgweb:
+    container_name: ${PROJECT_NAME}_pgweb
+    <<: *web
+    image: sosedoff/pgweb:latest
+    environment:
+      PGWEB_DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable
+    ports:
+      - 8081:8081
+    depends_on:
+      - db
+
+
 volumes:
   postgres_data:
   static_volume:

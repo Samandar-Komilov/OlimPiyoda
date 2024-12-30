@@ -1,11 +1,19 @@
+import jwt
+from django.conf import settings
+from django.contrib.auth import get_user_model
 from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
-from rest_framework.generics import CreateAPIView
+from rest_framework import status
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
 from apps.users.api_endpoints.Register.serializers import UserRegisterSerializer
+from apps.users.tasks import send_confirm_email
+
+User = get_user_model()
 
 
-class RegisterAPIView(CreateAPIView):
+class RegisterAPIView(GenericAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes = (AllowAny,)
 
@@ -43,4 +51,20 @@ class RegisterAPIView(CreateAPIView):
         },
     )
     def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
+
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+
+            token = jwt.encode({"email": user.email}, settings.SECRET_KEY, algorithm="HS256")
+            send_confirm_email.delay(user.email, token)
+
+            return Response(
+                {
+                    "message": "Registration successful. Please check your email for verification.",
+                    "user": serializer.data,
+                },
+                status=status.HTTP_201_CREATED,
+            )
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

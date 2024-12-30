@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# To update run
-pip install --upgrade pip
-
 # Install required packages (change this if needed)
 pip install -r requirements/base.txt
 

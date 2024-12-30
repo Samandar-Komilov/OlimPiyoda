@@ -11,7 +11,7 @@ elif [ "$1" == "restart" ]; then
 elif [ "$1" == "restart-hard" ]; then
   docker compose -f docker-compose.yml down
   docker compose -f docker-compose.yml up -d
-elif [ "$1" == "reset"]; then
+elif [ "$1" == "reset" ]; then
   docker compose -f docker-compose.yml down
   docker compose -f docker-compose.yml build
   docker compose -f docker-compose.yml up -d
