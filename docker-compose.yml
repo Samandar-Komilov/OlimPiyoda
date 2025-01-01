@@ -31,6 +31,7 @@ services:
       - seccomp:unconfined
     volumes:
       - ./:/app
+      - ./requirements:/home/app/web/requirements
       - ./static:/home/app/web/static
       - ./media:/home/app/web/media
       - ./locale:/home/app/web/locale
@@ -72,12 +73,13 @@ services:
   # pgweb service for PostgreSQL web interface
   pgweb:
     container_name: ${PROJECT_NAME}_pgweb
-    <<: *web
     image: sosedoff/pgweb:latest
+    env_file:
+      - .env
     environment:
       PGWEB_DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable
     ports:
-      - 8081:8081
+      - 127.0.0.1:${PGWEB_PORT}:8081
     depends_on:
       - db
 

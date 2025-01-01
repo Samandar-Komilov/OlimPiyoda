@@ -24,7 +24,10 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)
 
-    def create_staffuser(self, email, password, **extra_fields):
+    def create_staffuser(self, email, password="", **extra_fields):  # nosec
+        if not email or not password:
+            raise ValueError("Staff user must have an email AND a password.")
+
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", False)
 
@@ -32,7 +35,7 @@ class UserManager(BaseUserManager):
             raise ValueError("Staff user must have is_staff=True.")
         return self._create_user(email, password, **extra_fields)
 
-    def create_superuser(self, email, password, **extra_fields):
+    def create_superuser(self, email, password="", **extra_fields):  # nosec
         if not email or not password:
             raise ValueError("Superuser must have an email AND a password.")
 

@@ -2,6 +2,8 @@
 
 if [ $1 == "build" ]; then
   docker compose -f docker-compose.yml build
+elif [ $1 == "upbuild" ]; then
+  docker compose -f docker-compose.yml up --build
 elif [ $1 == "up" ]; then
   docker compose -f docker-compose.yml up -d
 elif [ $1 == "down" ]; then
@@ -25,6 +27,8 @@ elif [ $1 == "merge" ]; then
   docker compose -f docker-compose.yml exec web python manage.py makemigrations --merge
 elif [ $1 == "test" ]; then
   docker compose -f docker-compose.yml exec web python manage.py test
+elif [ $1 == "pytest" ]; then
+  docker compose -f docker-compose.yml exec web pytest
 elif [ $1 == "makemessages" ]; then
   docker compose -f docker-compose.yml exec web python manage.py makemessages
 elif [ $1 == "compilemessages" ]; then
