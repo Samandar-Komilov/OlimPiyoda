@@ -33,3 +33,18 @@ class District(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class Content(models.Model):
+    file = models.FileField(upload_to="contents/", verbose_name=_("File"), null=False, blank=False)
+    created_by = models.ForeignKey(
+        "users.User", on_delete=models.SET_NULL, verbose_name=_("Created by"), null=True, blank=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_("Created at"))
+
+    class Meta:
+        verbose_name = _("Content")
+        verbose_name_plural = _("Contents")
+
+    def __str__(self):
+        return f"File created by {self.created_by.username}"

@@ -48,6 +48,7 @@ EXTERNAL_APPS: list[str] = [
 CUSTOM_APPS: list[str] = [
     "apps.common",
     "apps.users",
+    "apps.olympiads",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + EXTERNAL_APPS + CUSTOM_APPS
